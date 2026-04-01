@@ -1,0 +1,448 @@
+:root {
+    --diet-primary: #10B981;
+    --diet-primary-dark: #059669;
+    --diet-primary-light: #ECFDF5;
+    --diet-danger: #EF4444;
+    --diet-danger-light: #FEF2F2;
+    --diet-bg: #FFFFFF;
+    --diet-surface: #F8FAFC;
+    --diet-text-main: #1E293B;
+    --diet-text-muted: #64748B;
+    --diet-border: #E2E8F0;
+    --diet-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --diet-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --diet-radius: 16px;
+}
+
+/* Base style for the Generator Module */
+.diet-generator-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--diet-bg);
+    padding: 40px;
+    border-radius: var(--diet-radius);
+    border: 1px solid var(--diet-border);
+    box-shadow: var(--diet-shadow-lg);
+    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.diet-module-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.diet-module-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--diet-text-main);
+    letter-spacing: -0.025em;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, #10B981 0%, #3B82F6 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.diet-module-header p {
+    color: var(--diet-text-muted);
+    font-size: 1.1rem;
+}
+
+/* Profile Section Grid */
+.diet-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+    padding: 30px;
+    background: var(--diet-surface);
+    border-radius: var(--diet-radius);
+    border: 1px solid var(--diet-border);
+}
+
+.diet-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.diet-input-group label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--diet-text-main);
+}
+
+.diet-input-group input, 
+.diet-input-group select {
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 2px solid var(--diet-border);
+    background: white;
+    font-size: 1rem;
+    color: var(--diet-text-main);
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.diet-input-group input:focus, 
+.diet-input-group select:focus {
+    border-color: var(--diet-primary);
+    box-shadow: 0 0 0 4px var(--diet-primary-light);
+}
+
+/* Allergy Chips and Section */
+.allergy-section {
+    margin-bottom: 40px;
+}
+
+.allergy-section h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--diet-text-main);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.allergy-section h3::before {
+    content: '🚫';
+}
+
+.allergy-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.allergy-chip {
+    padding: 10px 20px;
+    border-radius: 100px;
+    background: white;
+    border: 2px solid var(--diet-border);
+    color: var(--diet-text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+}
+
+.allergy-chip:hover {
+    border-color: var(--diet-text-muted);
+    transform: translateY(-2px);
+}
+
+.allergy-chip.active {
+    background: var(--diet-danger-light);
+    border-color: var(--diet-danger);
+    color: var(--diet-danger);
+    animation: chipPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes chipPop {
+    0% { transform: scale(0.9); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Action Button */
+.generate-btn {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, var(--diet-primary) 0%, var(--diet-primary-dark) 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+    transition: all 0.3s ease;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.generate-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.generate-btn:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 15px 20px -3px rgba(16, 185, 129, 0.4);
+}
+
+.generate-btn:active {
+    transform: scale(0.98);
+}
+
+/* Results Display Cards */
+.daily-plan-card {
+    background: white;
+    border: 1px solid var(--diet-border);
+    border-radius: var(--diet-radius);
+    overflow: hidden;
+    box-shadow: var(--diet-shadow);
+    animation: fadeInScale 0.5s ease-out forwards;
+}
+
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.card-header {
+    background: var(--diet-surface);
+    padding: 24px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--diet-border);
+}
+
+.card-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--diet-text-main);
+}
+
+.calorie-target {
+    background: var(--diet-primary-light);
+    color: var(--diet-primary);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.macro-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px;
+    padding: 30px;
+    background: white;
+}
+
+.macro-stat {
+    padding: 16px;
+    background: var(--diet-surface);
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid var(--diet-border);
+    transition: transform 0.2s ease;
+}
+
+.macro-stat:hover {
+    transform: translateY(-4px);
+    border-color: var(--diet-primary);
+}
+
+.macro-stat .value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--diet-text-main);
+    margin-bottom: 4px;
+}
+
+.macro-stat .label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--diet-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.meal-list {
+    padding: 10px 30px;
+}
+
+.meal-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--diet-border);
+    animation: slideInRight 0.5s ease-out backwards;
+}
+
+.meal-item:nth-child(1) { animation-delay: 0.1s; }
+.meal-item:nth-child(2) { animation-delay: 0.2s; }
+.meal-item:nth-child(3) { animation-delay: 0.3s; }
+.meal-item:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.meal-item:last-child {
+    border-bottom: none;
+}
+
+.meal-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.meal-type {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--diet-primary);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+}
+
+.meal-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--diet-text-main);
+    margin-bottom: 4px;
+}
+
+.meal-macros {
+    font-size: 0.9rem;
+    color: var(--diet-text-muted);
+}
+
+.add-to-diary-btn {
+    width: calc(100% - 60px);
+    margin: 20px 30px 30px 30px;
+    padding: 16px;
+    background: white;
+    border: 2px solid var(--diet-primary);
+    color: var(--diet-primary);
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.add-to-diary-btn:hover {
+    background: var(--diet-primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.error-message {
+    text-align: center;
+    padding: 40px;
+    background: var(--diet-danger-light);
+    color: var(--diet-danger);
+    border-radius: var(--diet-radius);
+    border: 2px dashed var(--diet-danger);
+    font-weight: 600;
+}
+
+/* Diet Diary Style */
+.diet-diary-section {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 2px solid var(--diet-border);
+    animation: fadeIn 0.8s ease-out;
+}
+
+.diary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.clear-diary-btn {
+    padding: 8px 16px;
+    background: var(--diet-surface);
+    border: 1px solid var(--diet-border);
+    border-radius: 8px;
+    color: var(--diet-text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.clear-diary-btn:hover {
+    background: var(--diet-danger);
+    color: white;
+    border-color: var(--diet-danger);
+}
+
+.diary-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+}
+
+.diary-table th {
+    text-align: left;
+    padding: 0 20px 8px 20px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--diet-text-muted);
+}
+
+.diary-row {
+    background: var(--diet-surface);
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.diary-row:hover {
+    transform: scale(1.01);
+    box-shadow: var(--diet-shadow);
+}
+
+.diary-row td {
+    padding: 20px;
+    font-size: 0.95rem;
+    color: var(--diet-text-main);
+}
+
+.diary-row td:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    font-weight: 700;
+}
+
+.diary-row td:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    text-align: right;
+}
+
+.empty-diary-msg {
+    text-align: center;
+    padding: 40px;
+    background: var(--diet-surface);
+    border-radius: var(--diet-radius);
+    color: var(--diet-text-muted);
+    font-style: italic;
+    border: 1px dashed var(--diet-border);
+}
+
+.diary-protein-badge {
+    padding: 4px 10px;
+    background: #D1FAE5;
+    color: #065F46;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}

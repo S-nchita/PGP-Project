@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Diet Generator | FitTrack</title>
+    <link rel="stylesheet" href="diet_generator.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="diet-generator-container">
+    <header class="module-header">
+        <h1>Diet Generator</h1>
+        <p>Personalized meal plans based on your BMR, allergies, and protein requirements.</p>
+    </header>
+
+    <!-- User Profile Input -->
+    <form class="profile-form" id="profileForm">
+        <div class="input-group">
+            <label for="weight">Weight (kg)</label>
+            <input type="number" id="weight" value="70" min="20" max="300" step="0.1">
+        </div>
+        <div class="input-group">
+            <label for="height">Height (cm)</label>
+            <input type="number" id="height" value="175" min="50" max="250">
+        </div>
+        <div class="input-group">
+            <label for="age">Age</label>
+            <input type="number" id="age" value="25" min="1" max="120">
+        </div>
+        <div class="input-group">
+            <label for="gender">Gender</label>
+            <select id="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+    </form>
+
+    <!-- Allergy Selection chips -->
+    <div class="allergy-section">
+        <h3>Exclude Allergens (Click to toggle)</h3>
+        <div class="allergy-chips" id="allergyChips">
+            <!-- Chips rendered by JS -->
+        </div>
+    </div>
+
+    <!-- Generate Button -->
+    <button class="generate-btn" id="generateBtn">Generate My Plan</button>
+
+    <!-- Results Display -->
+    <div id="resultsContainer" class="results-container">
+        <!-- Results rendered by JS -->
+    </div>
+</div>
+
+<script src="diet_generator.js"></script>
+</body>
+</html>
