@@ -131,6 +131,16 @@
       <div class="qs-unit" id="stepsPct" style="font-size:11px;margin-top:2px">0% of daily goal</div>
     </div>
     <div class="qs-card"><div class="qs-label">🔥 Active Streak</div><div class="qs-value" style="color:var(--orange)" id="streakVal">0</div><div class="qs-unit">days in a row</div></div>
+    <div class="qs-card eco-card">
+      <div class="qs-label">🌍 Carbon Offset</div>
+      <div class="qs-value" style="color:#10B981" id="ecoCarbon">0.0</div>
+      <div class="qs-unit">kg CO₂ saved</div>
+    </div>
+    <div class="qs-card eco-card">
+      <div class="qs-label">🌱 Kinetic Watts</div>
+      <div class="qs-value" style="color:#059669" id="ecoWatts">0</div>
+      <div class="qs-unit">virtual watts generated</div>
+    </div>
     <div class="qs-card bmi-card" id="bmiCard">
       <div class="qs-label">⚖️ BMI Calculator</div>
       <div class="bmi-inputs">
@@ -171,6 +181,33 @@
       <div class="nutrition-item">
         <div class="circle-wrap"><svg viewBox="0 0 100 100"><circle class="circle-bg" cx="50" cy="50" r="40"/><circle class="circle-fill" cx="50" cy="50" r="40" stroke="#eab308" stroke-dasharray="251.2" stroke-dashoffset="251.2" id="fats-circle"/></svg><div class="circle-label"><span class="circle-val" id="db-fats">0</span><span class="circle-goal">/ 65</span></div></div>
         <div class="nutrition-name">Fats</div><div class="nutrition-unit">grams</div>
+      </div>
+    </div>
+  </div>
+  <!-- ── ECO IMPACT SECTION ── -->
+  <div class="card eco-impact-card">
+    <div class="card-title">Environmental Impact 🌲</div>
+    <div class="eco-grid">
+      <div class="eco-stat-main">
+        <div class="eco-num" id="ecoTotalCarbon">0.0</div>
+        <div class="eco-lbl">Total CO₂ Saved (kg)</div>
+        <p class="eco-desc">You've saved the equivalent of driving a car for <span id="ecoEquivKm">0.0</span> km by walking and exercising!</p>
+      </div>
+      <div class="eco-milestone">
+        <div class="milestone-header">
+          <span class="milestone-icon">🌳</span>
+          <div>
+            <div class="milestone-title">Tree Planting Progress</div>
+            <div class="milestone-sub">Every 500 Kinetic Watts generated plants 1 real tree.</div>
+          </div>
+        </div>
+        <div class="milestone-bar-wrap">
+          <div class="milestone-bar-fill" id="treeBar" style="width: 0%"></div>
+        </div>
+        <div class="milestone-footer">
+          <span id="treeWatts">0 / 500 Watts</span>
+          <span id="treesPlanted">0 Trees Planted</span>
+        </div>
       </div>
     </div>
   </div>
@@ -357,6 +394,13 @@
                 <select id="diet-gender">
                     <option value="male">Male</option>
                     <option value="female">Female</option>
+                </select>
+            </div>
+            <div class="diet-input-group">
+                <label for="diet-preference">Dietary Preference</label>
+                <select id="diet-preference">
+                    <option value="veg">Vegetarian (Pure Veg)</option>
+                    <option value="non-veg">Non-Vegetarian (All Options)</option>
                 </select>
             </div>
         </div>

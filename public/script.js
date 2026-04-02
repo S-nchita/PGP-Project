@@ -259,10 +259,54 @@ function updateWaterUI(){
 }
 function adjSteps(d){stepsCount=Math.max(0,Math.min(30000,stepsCount+d));updateStepsUI();}
 function updateStepsUI(){
-  document.getElementById('stepsVal').textContent=stepsCount.toLocaleString();
-  const pct=Math.min(100,(stepsCount/10000)*100);
-  document.getElementById('stepsBar').style.width=pct+'%';
-  document.getElementById('stepsPct').textContent=Math.round(pct)+'% of daily goal';
+  const stepsValEl = document.getElementById('stepsVal');
+  if(stepsValEl) stepsValEl.textContent=stepsCount.toLocaleString();
+  
+  const stepsBarEl = document.getElementById('stepsBar');
+  if(stepsBarEl) stepsBarEl.style.width=Math.min(100,(stepsCount/10000)*100)+'%';
+  
+  const stepsPctEl = document.getElementById('stepsPct');
+  if(stepsPctEl) stepsPctEl.textContent=Math.round(Math.min(100,(stepsCount/10000)*100))+'% of daily goal';
+  
+  updateEcoImpact();
+}
+
+// ── ECO IMPACT LOGIC ──
+function updateEcoImpact(){
+  // Carbon Calculations
+  // 1000 steps ≈ 0.15kg CO2 saved (vs driving)
+  const carbonFromSteps = stepsCount * 0.00015;
+  
+  // Kinetic Currency (Watts)
+  // Conversion: 100 Calories Burned ≈ 10 "Virtual Watts"
+  const burned = exercises.reduce((s,e)=>s+e.calories,0);
+  const kineticWatts = Math.round(burned * 0.1);
+  
+  // Update UI Elements
+  const ecoCarbonEl = document.getElementById('ecoCarbon');
+  const ecoTotalCarbonEl = document.getElementById('ecoTotalCarbon');
+  const ecoWattsEl = document.getElementById('ecoWatts');
+  
+  if(ecoCarbonEl) ecoCarbonEl.textContent = carbonFromSteps.toFixed(2);
+  if(ecoTotalCarbonEl) ecoTotalCarbonEl.textContent = carbonFromSteps.toFixed(2);
+  if(ecoWattsEl) ecoWattsEl.textContent = kineticWatts;
+  
+  const equivKm = carbonFromSteps / 0.19;
+  const ecoEquivKmEl = document.getElementById('ecoEquivKm');
+  if(ecoEquivKmEl) ecoEquivKmEl.textContent = equivKm.toFixed(1);
+  
+  // Tree Progress (Every 500 Watts = 1 Tree)
+  const trees = Math.floor(kineticWatts / 500);
+  const progressWatts = kineticWatts % 500;
+  const treePct = (progressWatts / 500) * 100;
+  
+  const treeBarEl = document.getElementById('treeBar');
+  const treeWattsEl = document.getElementById('treeWatts');
+  const treesPlantedEl = document.getElementById('treesPlanted');
+  
+  if(treeBarEl) treeBarEl.style.width = treePct + '%';
+  if(treeWattsEl) treeWattsEl.textContent = `${progressWatts} / 500 Watts`;
+  if(treesPlantedEl) treesPlantedEl.textContent = `${trees} Trees Planted`;
 }
 
 // ══════════════════════════════════════════════════
@@ -443,7 +487,7 @@ function updateExStats(){
   document.getElementById('ex-stat-cal').textContent=exercises.reduce((s,e)=>s+e.calories,0);
   document.getElementById('ex-stat-dur').textContent=exercises.reduce((s,e)=>s+e.duration,0);
   document.getElementById('ex-stat-count').textContent=exercises.length;
-  updateDashboard();updateProgressPage();
+  updateDashboard();updateProgressPage();updateEcoImpact();
 }
 function delEx(i){exercises.splice(i,1);renderExTable(exercises);updateExStats();}
 function filterExTable(v){renderExTable(v?exercises.filter(e=>e.name.toLowerCase().includes(v.toLowerCase())||e.type.toLowerCase().includes(v.toLowerCase())):exercises);}
