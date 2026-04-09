@@ -277,7 +277,10 @@
 
 <!-- ── TIPS ── -->
 <div id="page-tips" class="view">
-  <div class="page-header"><div><h1 class="page-title">Tips &amp; Suggestions</h1><p class="page-sub">Expert advice for your fitness journey</p></div></div>
+  <div class="page-header">
+    <div><h1 class="page-title">Tips &amp; Suggestions</h1><p class="page-sub">Expert advice for your fitness journey</p></div>
+    <button class="ai-tip-btn" onclick="generateAITips()">✨ Generate Smart Tips</button>
+  </div>
   <div class="tips-summary-row">
     <div class="tips-sum-card tips-sum-nutrition"><div class="tips-sum-header"><span class="tips-sum-icon">🍎</span><span class="tips-sum-title">Nutrition</span></div><p class="tips-sum-body">Focus on whole foods, lean proteins, and balanced macros for optimal results</p></div>
     <div class="tips-sum-card tips-sum-exercise"><div class="tips-sum-header"><span class="tips-sum-icon">🏋️</span><span class="tips-sum-title">Exercise</span></div><p class="tips-sum-body">Combine cardio and strength training for best weight management results</p></div>
@@ -434,7 +437,14 @@
 <div class="modal-overlay" id="foodModal">
   <div class="modal">
     <div class="modal-header"><div class="modal-title" id="foodModalTitle">Add Food</div><button class="modal-close" onclick="closeFoodModal()">✕</button></div>
-    <div class="modal-field suggestions-wrap"><label class="modal-label">Food Item</label><input class="modal-input" type="text" id="foodInput" placeholder="Search or type food name..." oninput="handleFoodInput(this.value)" autocomplete="off"/><div class="suggestions-list" id="suggestionsList"></div></div>
+    <div class="modal-field suggestions-wrap">
+      <label class="modal-label">Food Item</label>
+      <div class="input-with-btn">
+        <input class="modal-input" type="text" id="foodInput" placeholder="Search or type food name..." oninput="handleFoodInput(this.value)" autocomplete="off"/>
+        <button class="btn-smart-ai" onclick="smartAnalyzeFood()">✨ AI Scan</button>
+      </div>
+      <div class="suggestions-list" id="suggestionsList"></div>
+    </div>
     <div class="modal-field"><label class="modal-label">Portion Size</label><select class="modal-select" id="portionSelect" onchange="updateNutritionPreview()"><option value="small">Small</option><option value="medium" selected>Medium</option><option value="large">Large</option></select></div>
     <div class="modal-nutrition" id="nutritionPreview"><div class="modal-nutrition-title">Estimated Nutrition</div><div class="modal-nutrition-grid"><div class="modal-nut-item"><div class="modal-nut-val" id="prev-cal">—</div><div class="modal-nut-label">Calories</div></div><div class="modal-nut-item"><div class="modal-nut-val" id="prev-protein" style="color:var(--green)">—</div><div class="modal-nut-label">Protein</div></div><div class="modal-nut-item"><div class="modal-nut-val" id="prev-carbs" style="color:var(--blue)">—</div><div class="modal-nut-label">Carbs</div></div><div class="modal-nut-item"><div class="modal-nut-val" id="prev-fats" style="color:var(--yellow)">—</div><div class="modal-nut-label">Fats</div></div></div></div>
     <div class="modal-actions"><button class="btn-cancel" onclick="closeFoodModal()">Cancel</button><button class="btn-confirm-green" onclick="confirmAddFood()">Add Food</button></div>
@@ -445,7 +455,14 @@
 <div class="modal-overlay" id="exerciseModal">
   <div class="modal">
     <div class="modal-header"><div class="modal-title">Add Exercise</div><button class="modal-close" onclick="closeExModal()">✕</button></div>
-    <div class="modal-field suggestions-wrap"><label class="modal-label">Exercise Name</label><input class="modal-input" type="text" id="exNameInput" placeholder="e.g. Running, Cycling, Push-ups..." oninput="handleExInput(this.value)" autocomplete="off"/><div class="suggestions-list" id="exSuggestions"></div></div>
+    <div class="modal-field suggestions-wrap">
+      <label class="modal-label">Exercise Name</label>
+      <div class="input-with-btn">
+        <input class="modal-input" type="text" id="exNameInput" placeholder="e.g. Running, Cycling, Push-ups..." oninput="handleExInput(this.value)" autocomplete="off"/>
+        <button class="btn-smart-ex-ai" onclick="smartAnalyzeEx()">✨ AI Scan</button>
+      </div>
+      <div class="suggestions-list" id="exSuggestions"></div>
+    </div>
     <div class="modal-row">
       <div class="modal-field"><label class="modal-label">Exercise Type</label><select class="modal-select" id="exType" onchange="exRecalc()"><option value="cardio">Cardio</option><option value="strength">Strength</option><option value="hiit">HIIT</option><option value="flexibility">Flexibility</option><option value="sports">Sports</option><option value="yoga">Yoga</option></select></div>
       <div class="modal-field"><label class="modal-label">Duration (minutes)</label><input class="modal-input" type="number" id="exDuration" placeholder="e.g. 30" min="1" max="300" oninput="exRecalc()"/></div>

@@ -1,8 +1,5 @@
 const API = 'http://localhost:3000/api';
 
-// ══════════════════════════════════════════════════
-// DATA
-// ══════════════════════════════════════════════════
 const FOODS=[
   {name:'Oatmeal',cal:150,protein:5,carbs:27,fats:3},
   {name:'Scrambled Eggs',cal:140,protein:13,carbs:1,fats:10},
@@ -208,6 +205,7 @@ function goToApp(){
   updateStepsUI();
   initProgressCharts();
   loadProfileFromUser();
+  loadAIGoals();
   document.getElementById('streakVal').textContent=1;
 }
 
@@ -243,31 +241,63 @@ function syncDietProfile(){
   
   if(dw && currentUser.weight) dw.value = currentUser.weight;
   if(dh && currentUser.height) dh.value = currentUser.height;
-  // age is not explicitly in current site profile but we can try to guess or use default
-  // gender as well.
 }
 
 // ══════════════════════════════════════════════════
 // WATER & STEPS
 // ══════════════════════════════════════════════════
 function adjWater(d){waterCount=Math.max(0,Math.min(20,waterCount+d));updateWaterUI();}
-function updateWaterUI(){
+function adjSteps(d){stepsCount=Math.max(0,Math.min(30000,stepsCount+d));updateStepsUI();}
+
+async function loadAIGoals() {
+  if(!currentUser || !currentUser.userId) return;
+  try {
+    const res = await fetch(`${API}/gamification/status/${currentUser.userId}`);
+    const data = await res.json();
+    if(data.goals && data.goals.length > 0) {
+      // Update UI with AI goals if they exist
+      data.goals.forEach(goal => {
+        if(goal.goal_type === 'water') {
+           // Target is in glasses
+        } else if(goal.goal_type === 'steps') {
+           // Target is in steps
+        }
+      });
+      renderGoals(data.goals);
+    }
+  } catch(e) { console.error("Failed to load goals", e); }
+}
+
+function renderGoals(goals) {
+  goals.forEach(g => {
+    if(g.goal_type === 'water') {
+      const el = document.getElementById('waterVal').parentElement.querySelector('.qs-unit');
+      if(el) el.textContent = `/ ${g.target_value} glasses`;
+      waterCount = g.current_value;
+      updateWaterUI(g.target_value);
+    } else if(g.goal_type === 'steps') {
+      const el = document.getElementById('stepsVal').parentElement.querySelector('.qs-unit');
+      if(el) el.textContent = `/ ${g.target_value.toLocaleString()} steps`;
+      stepsCount = g.current_value;
+      updateStepsUI(g.target_value);
+    }
+  });
+}
+
+function updateWaterUI(target = 8){
   document.getElementById('waterVal').textContent=waterCount;
-  document.getElementById('waterBar').style.width=Math.min(100,(waterCount/8)*100)+'%';
-  let g='';for(let i=0;i<8;i++)g+=`<span style="font-size:13px;opacity:${i<waterCount?1:.2}">💧</span>`;
+  document.getElementById('waterBar').style.width=Math.min(100,(waterCount/target)*100)+'%';
+  let g='';for(let i=0;i<target;i++)g+=`<span style="font-size:13px;opacity:${i<waterCount?1:.2}">💧</span>`;
   document.getElementById('waterGlasses').innerHTML=g;
 }
-function adjSteps(d){stepsCount=Math.max(0,Math.min(30000,stepsCount+d));updateStepsUI();}
-function updateStepsUI(){
+
+function updateStepsUI(target = 10000){
   const stepsValEl = document.getElementById('stepsVal');
   if(stepsValEl) stepsValEl.textContent=stepsCount.toLocaleString();
-  
   const stepsBarEl = document.getElementById('stepsBar');
-  if(stepsBarEl) stepsBarEl.style.width=Math.min(100,(stepsCount/10000)*100)+'%';
-  
+  if(stepsBarEl) stepsBarEl.style.width=Math.min(100,(stepsCount/target)*100)+'%';
   const stepsPctEl = document.getElementById('stepsPct');
-  if(stepsPctEl) stepsPctEl.textContent=Math.round(Math.min(100,(stepsCount/10000)*100))+'% of daily goal';
-  
+  if(stepsPctEl) stepsPctEl.textContent=Math.round(Math.min(100,(stepsCount/target)*100))+'% of daily goal';
   updateEcoImpact();
 }
 
@@ -462,11 +492,112 @@ function pickFood(name){
 }
 function updateNutritionPreview(){
   if(!selectedFood)return;
-  const m=PMULT[document.getElementById('portionSelect').value];
+  const m=PMULT[document.getElementById('portionSelect').value]||1;
   document.getElementById('prev-cal').textContent=Math.round(selectedFood.cal*m);
   document.getElementById('prev-protein').textContent=Math.round(selectedFood.protein*m)+'g';
   document.getElementById('prev-carbs').textContent=Math.round(selectedFood.carbs*m)+'g';
   document.getElementById('prev-fats').textContent=Math.round(selectedFood.fats*m)+'g';
+}
+
+async function smartAnalyzeFood() {
+  const foodName = document.getElementById('foodInput').value.trim();
+  if(!foodName) return;
+  
+  const btn = document.querySelector('.btn-smart-ai');
+  if(btn) btn.textContent = '✨ Analyzing...';
+  
+  try {
+    const res = await fetch(`${API}/ai/analyze-food`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ foodName, portion: document.getElementById('portionSelect').value })
+    });
+    const data = await res.json();
+    
+    selectedFood = {
+      name: foodName,
+      cal: data.calories,
+      protein: data.protein,
+      carbs: data.carbs,
+      fats: data.fats
+    };
+    
+  updateNutritionPreview();
+  } catch (e) {
+    console.error("AI Analysis failed", e);
+  } finally {
+    if(btn) btn.textContent = '✨ AI Scan';
+  }
+}
+
+async function smartAnalyzeEx() {
+  const name = document.getElementById('exNameInput').value.trim();
+  const duration = parseInt(document.getElementById('exDuration').value) || 30;
+  if(!name) return;
+  
+  const btn = document.querySelector('.btn-smart-ex-ai');
+  if(btn) btn.textContent = '✨ Analyzing...';
+  
+  try {
+    const res = await fetch(`${API}/ai/analyze-exercise`, {
+       method: 'POST',
+       headers: {'Content-Type': 'application/json'},
+       body: JSON.stringify({ name, duration, intensity: currentIntensity })
+    });
+    const data = await res.json();
+    
+    document.getElementById('exType').value = data.type || 'cardio';
+    document.getElementById('exCalVal').textContent = data.calories_burned;
+    document.getElementById('exCalNote').textContent = data.insights || 'AI Analyzed';
+    
+    selectedEx = {
+      name,
+      type: data.type,
+      met: (data.calories_burned / (70 * (duration/60))) || 6,
+      icon: '✨'
+    };
+  } catch (e) {
+    console.error("AI Ex Analysis failed", e);
+  } finally {
+    if(btn) btn.textContent = '✨ AI Scan';
+  }
+}
+
+async function generateAITips() {
+  if(!currentUser) return;
+  const btn = document.querySelector('.ai-tip-btn');
+  const originalHtml = btn.innerHTML;
+  btn.innerHTML = '✨ AI is thinking...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch(`${API}/ai/generate-tip`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        profile: {
+          age: document.getElementById('pf-age').value || 25,
+          gender: document.getElementById('pf-gender').value || 'Other',
+          goal: document.getElementById('pf-goal').value || 'Healthy'
+        }
+      })
+    });
+    const data = await res.json();
+    
+    const container = document.querySelector('.tips-summary-row');
+    container.innerHTML = data.tips.map((tip, i) => `
+      <div class="tips-sum-card" style="background: white; border-color: var(--purple)">
+        <div class="tips-sum-header"><span class="tips-sum-icon">${['🚀','💡','⚖️'][i]}</span><span class="tips-sum-title">Smart Tip ${i+1}</span></div>
+        <p class="tips-sum-body">${tip}</p>
+      </div>
+    `).join('');
+    
+  } catch (e) {
+    console.error("AI Tips failed", e);
+  } finally {
+    btn.innerHTML = originalHtml;
+    btn.disabled = false;
+  }
 }
 function confirmAddFood(){
   if(!selectedFood){document.getElementById('foodInput').style.borderColor='var(--red)';setTimeout(()=>document.getElementById('foodInput').style.borderColor='',1500);return;}

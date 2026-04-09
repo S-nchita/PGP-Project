@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewards & Achievements | FitTrack</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="rewards.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="rewards-page">
+
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="logo">Fit<span>Track</span> 🏆</div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Dashboard</a>
+                <a href="#" class="nav-link active">Rewards</a>
+            </div>
+            <div class="user-status">
+                <div class="coin-display">
+                    <span class="coin-icon">🪙</span>
+                    <span id="userCoins">0</span>
+                </div>
+                <div class="profile-mini">
+                    <div id="navAvatar" class="avatar-sm">U</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="rewards-container">
+        <section class="rewards-hero">
+            <h1>Your Rewards Hall</h1>
+            <p>Earn coins by completing daily goals and unlock exclusive badges and perks!</p>
+        </section>
+
+        <section class="section-card">
+            <div class="section-header">
+                <h2>Daily Goals</h2>
+                <span class="date-badge" id="todayDate">April 2, 2026</span>
+            </div>
+            <div class="goals-grid" id="goalsGrid">
+                <!-- Goals will be loaded here -->
+                <div class="goal-item-placeholder">Loading goals...</div>
+            </div>
+        </section>
+
+        <div class="rewards-tabs">
+            <button class="tab-btn active" onclick="switchTab('store')">Reward Store</button>
+            <button class="tab-btn" onclick="switchTab('achievements')">My Achievements</button>
+        </div>
+
+        <section id="storeSection" class="reward-section active">
+            <div class="section-header">
+                <h2>Unlockable Rewards</h2>
+                <p>Spend your hard-earned coins on these exclusive items.</p>
+            </div>
+            <div class="rewards-grid" id="storeGrid">
+                <!-- Store items will be loaded here -->
+            </div>
+        </section>
+
+        <section id="achievementsSection" class="reward-section">
+            <div class="section-header">
+                <h2>My Collection</h2>
+                <p>Badges and items you've already earned.</p>
+            </div>
+            <div class="achievements-grid" id="achievementsGrid">
+                <!-- Achievement items will be loaded here -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Reward Confirmation Modal -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Unlock Reward?</h3>
+                <button class="modal-close" onclick="closeRewardModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="reward-preview-large">
+                    <span id="modalIcon">🏆</span>
+                </div>
+                <h2 id="modalRewardName">Golden Badge</h2>
+                <p id="modalRewardDesc">This will cost you 100 coins. Are you sure you want to unlock it?</p>
+                <div class="modal-footer">
+                    <button class="btn-secondary" onclick="closeRewardModal()">Cancel</button>
+                    <button class="btn-primary" id="confirmUnlockBtn">Unlock for <span id="modalCost">100</span> 🪙</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div id="toast" class="toast">
+        <div class="toast-content">
+            <span class="toast-icon">✨</span>
+            <div class="toast-msg">Reward unlocked successfully!</div>
+        </div>
+    </div>
+
+    <script src="rewards.js"></script>
+</body>
+</html>

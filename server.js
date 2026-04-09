@@ -14,6 +14,8 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/food', require('./routes/food'));
 app.use('/api/exercise', require('./routes/exercise'));
 app.use('/api/profile', require('./routes/profile'));
+app.use('/api/gamification', require('./routes/gamification'));
+app.use('/api/ai', require('./routes/ai'));
 
 app.listen(3000, () => {
   console.log("FitTrack running on http://localhost:3000");
