@@ -53,6 +53,7 @@ let exercises=[];
 let currentMeal=null,selectedFood=null,selectedEx=null,currentIntensity='medium';
 let currentUser=null;
 let waterCount=0,stepsCount=0;
+let currentCalGoal=2000, currentBurnGoal=500;
 
 // ══════════════════════════════════════════════════
 // HELPER FUNCTIONS
@@ -455,8 +456,8 @@ function updateDashboard(){
   const burned=exercises.reduce((s,e)=>s+e.calories,0);
   document.getElementById('db-consumed').textContent=c;
   document.getElementById('db-burned').textContent=burned;
-  document.getElementById('db-remaining').textContent=Math.max(0,2000-c);
-  document.getElementById('calProgress').style.width=Math.min(100,(c/2000)*100)+'%';
+  document.getElementById('db-remaining').textContent=Math.max(0,currentCalGoal-c);
+  document.getElementById('calProgress').style.width=Math.min(100,(c/currentCalGoal)*100)+'%';
   document.getElementById('db-protein').textContent=p;
   document.getElementById('db-carbs').textContent=ca;
   document.getElementById('db-fats').textContent=f;
@@ -693,10 +694,15 @@ function calcBMI(){
   const bmiRounded=Math.round(bmi*10)/10;
   document.getElementById('bmiNumber').textContent=bmiRounded;
   let cat,cls,markerPct;
-  if(bmi<18.5){cat='Underweight';cls='bmi-underweight';markerPct=Math.min(22,(bmi/18.5)*22);}
-  else if(bmi<25){cat='Normal';cls='bmi-normal';markerPct=22+((bmi-18.5)/(25-18.5))*26;}
-  else if(bmi<30){cat='Overweight';cls='bmi-overweight';markerPct=48+((bmi-25)/5)*26;}
-  else{cat='Obese';cls='bmi-obese';markerPct=Math.min(96,74+((bmi-30)/10)*22);}
+  if(bmi<18.5){cat='Underweight';cls='bmi-underweight';markerPct=Math.min(22,(bmi/18.5)*22); currentCalGoal=2500; currentBurnGoal=300;}
+  else if(bmi<25){cat='Normal';cls='bmi-normal';markerPct=22+((bmi-18.5)/(25-18.5))*26; currentCalGoal=2000; currentBurnGoal=500;}
+  else if(bmi<30){cat='Overweight';cls='bmi-overweight';markerPct=48+((bmi-25)/5)*26; currentCalGoal=1800; currentBurnGoal=600;}
+  else{cat='Obese';cls='bmi-obese';markerPct=Math.min(96,74+((bmi-30)/10)*22); currentCalGoal=1500; currentBurnGoal=800;}
+  
+  if(document.getElementById('db-goal')) document.getElementById('db-goal').textContent=currentCalGoal;
+  if(document.getElementById('db-burn-goal')) document.getElementById('db-burn-goal').textContent='/ '+currentBurnGoal+' cal target';
+  updateDashboard();
+
   const badge=document.getElementById('bmiCategory');
   badge.textContent=cat;badge.className='bmi-category-badge '+cls;
   const numEl=document.getElementById('bmiNumber');
